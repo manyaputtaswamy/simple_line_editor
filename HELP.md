@@ -47,4 +47,7 @@ Closes the line editor.
 Choose option 4.
 
 Example:
-4
+## Error Handling
+
+The program displays an error message when an invalid line number
+is entered or when the document is empty.
