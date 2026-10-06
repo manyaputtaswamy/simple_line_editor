@@ -147,10 +147,11 @@ void loadFile()
     printf("Total lines loaded: %d\n", lineCount);
 }
 
-/* Function to search for text */
-void searchText()
+/* Function to find and replace text */
+void findReplace()
 {
     char search[MAX_LENGTH];
+    char replace[MAX_LENGTH];
     int i;
     int found = 0;
 
@@ -160,16 +161,36 @@ void searchText()
         return;
     }
 
-    printf("\nEnter text to search: ");
+    printf("\nEnter text to find: ");
     fgets(search, MAX_LENGTH, stdin);
-
     search[strcspn(search, "\n")] = '\0';
+
+    printf("Enter replacement text: ");
+    fgets(replace, MAX_LENGTH, stdin);
+    replace[strcspn(replace, "\n")] = '\0';
 
     for (i = 0; i < lineCount; i++)
     {
-        if (strstr(lines[i], search) != NULL)
+        char *position;
+
+        position = strstr(lines[i], search);
+
+        if (position != NULL)
         {
-            printf("Text found in line %d: %s\n", i + 1, lines[i]);
+            char newLine[MAX_LENGTH];
+
+            int before = position - lines[i];
+            int searchLength = strlen(search);
+
+            strncpy(newLine, lines[i], before);
+            newLine[before] = '\0';
+
+            strcat(newLine, replace);
+            strcat(newLine, position + searchLength);
+
+            strcpy(lines[i], newLine);
+
+            printf("Text replaced in line %d.\n", i + 1);
             found = 1;
         }
     }
@@ -179,7 +200,6 @@ void searchText()
         printf("Text not found in the document.\n");
     }
 }
-
 int main()
 {
     int choice;
